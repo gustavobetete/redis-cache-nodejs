@@ -13,13 +13,19 @@ const getAllPducts = async() => {
     })
 }
 
+app.get('/saved', async(req, res) => { // exemplo deletando o cache assim que for adicionado ou mudado algo nos dados
+    await client.del('getAllPducts')
+    res.send({ ok: true})
+})
+
 app.get('/', async (req, res) => {
     const productsFromCache = await client.get('getAllPducts')
     if(productsFromCache){
         return res.send(JSON.parse(productsFromCache));
     }
     const products = await getAllPducts()
-    await client.set('getAllPducts', JSON.stringify(products), { EX: 10})
+    // await client.set('getAllPducts', JSON.stringify(products), { EX: 10}) // com expiração ( 10 segundos )
+    await client.set('getAllPducts', JSON.stringify(products))
     res.send({products})
 })
 
