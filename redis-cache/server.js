@@ -18,6 +18,9 @@ app.get('/saved', async(req, res) => { // exemplo deletando o cache assim que fo
     res.send({ ok: true})
 })
 
+// metodo de atualizar o cache sem ter que excluir o cache antigo, assim o tempo nunca vai voltar a ser grande
+// pois ele mantem o cache antigo guardado enquanto vai carregando o novo caso tenha alguma alteração
+
 app.get('/', async (req, res) => {
     const productsFromCache = await client.get("getAllPducts")
     const isProductsFromCacheStale = !(await client.get("getAllProducts:validation"))
